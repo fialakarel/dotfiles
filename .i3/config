@@ -224,5 +224,5 @@ exec xset r rate 150 60
 
 exec pasystray
 exec insync start
-exec udiskie -t &
+#exec udiskie -t &
 exec xhost +local:root
