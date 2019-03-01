@@ -10,7 +10,7 @@ echo "Source is: $src"
 echo "Destination is: $dst"
 
 # For each file create directories and symlink in destination
-for f in $(find $src -type f | egrep -v "create-symlinks.sh|delete-local-config.sh|README.md")
+for f in $(find $src -type f | egrep -v "create-symlinks.sh|delete-local-config.sh|README.md|\.git\/")
 do
     conffile="${f#$src/}"
     conffilename="${f##*/}"
