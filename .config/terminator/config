@@ -1,0 +1,28 @@
+[global_config]
+  borderless = True
+  enabled_plugins = ,
+  geometry_hinting = False
+  title_hide_sizetext = True
+[keybindings]
+  new_tab = <Primary>t
+  next_tab = <Alt>Right
+  prev_tab = <Alt>Left
+[layouts]
+  [[default]]
+    [[[child1]]]
+      parent = window0
+      profile = default
+      type = Terminal
+    [[[window0]]]
+      parent = ""
+      type = Window
+[plugins]
+[profiles]
+  [[default]]
+    background_image = None
+    cursor_color = "#00ff00"
+    foreground_color = "#00ff00"
+    scroll_on_output = False
+    scrollback_lines = 5000
+    scrollbar_position = hidden
+    show_titlebar = False
