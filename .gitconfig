@@ -93,8 +93,9 @@
         brt = for-each-ref --format=\"%(refname:short) > %(upstream:short)\" refs/heads
         # get upstream tracked branch or error
         brtracked = rev-parse --symbolic-full-name --abbrev-ref=strict HEAD@{u}
-        # commit all changes to a WIP commit
+        # commit all changes to a WIP or SAVE commit
         wip = !git add $(git rev-parse --show-toplevel) && git commit -m WIP
+        save = !git add $(git rev-parse --show-toplevel) && git commit -m SAVE
 
 [filter "lfs"]
 	clean = git-lfs clean -- %f
