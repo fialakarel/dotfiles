@@ -297,6 +297,11 @@ if [ -f ~/.bash_aliases_* ]; then
     . ~/.bash_aliases_*
 fi
 
+# Load miniconda3 if installed
+if [ -f ~/miniconda3/etc/profile.d/conda.sh ]; then
+    source ~/miniconda3/etc/profile.d/conda.sh
+fi
+
 # Bash greetings
 echo
 date +"%d.%m.%Y %H:%M:%S"
