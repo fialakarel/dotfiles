@@ -297,6 +297,10 @@ mirage() {
     nohup /usr/bin/mirage $@ &>/dev/null & disown
 }
 
+mplayer() {
+    /usr/bin/mplayer -nolirc $@
+}
+
 # Private aliases per device
 if [ -f ~/.bash_aliases_* ]; then
     . ~/.bash_aliases_*
