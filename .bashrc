@@ -292,6 +292,11 @@ alias search-for-text-in-file='grep --color=always --exclude=".*" --exclude-dir=
 
 alias search-for-filename='find . | grep --ignore-case --color=always'
 
+# Run mirage from shell and avoid spamming console
+mirage() {
+    nohup /usr/bin/mirage $@ &>/dev/null & disown
+}
+
 # Private aliases per device
 if [ -f ~/.bash_aliases_* ]; then
     . ~/.bash_aliases_*
