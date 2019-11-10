@@ -301,6 +301,17 @@ mplayer() {
     /usr/bin/mplayer -nolirc $@
 }
 
+adminer() {
+    docker run \
+        --detach \
+        --restart always \
+        --name adminer \
+        --publish 127.0.0.1:8080:8080/tcp \
+        adminer:4-standalone
+
+    xdg-open http://127.0.0.1:8080
+}
+
 # Private aliases per device
 if [ -f ~/.bash_aliases_* ]; then
     . ~/.bash_aliases_*
