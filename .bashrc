@@ -312,6 +312,15 @@ adminer() {
     xdg-open http://127.0.0.1:8080
 }
 
+pycharm() {
+    if [ ! -f /opt/pycharm-community-*/bin/pycharm.sh ]
+    then
+        echo "You have to install pycharm first!"
+    else
+        nohup /opt/pycharm-community-*/bin/pycharm.sh $@ &>/dev/null </dev/null &
+    fi
+}
+
 # Private aliases per device
 if [ -f ~/.bash_aliases_* ]; then
     . ~/.bash_aliases_*
