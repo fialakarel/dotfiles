@@ -297,6 +297,11 @@ mirage() {
     nohup /usr/bin/mirage $@ &>/dev/null & disown
 }
 
+# Run gimp from shell and avoid spamming console
+gimp() {
+    nohup /usr/bin/gimp $@ &>/dev/null & disown
+}
+
 mplayer() {
     /usr/bin/mplayer -nolirc $@
 }
