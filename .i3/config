@@ -209,6 +209,8 @@ bindsym $mod+Shift+q exec "xterm -e xkill"
 # mod+f5 to turn off display
 bindsym $mod+F5 exec sleep 0.1 && xset -display :0.0 dpms force off
 
+bindsym --release $mod+Print exec "scrot -s"
+
 bindsym $mod+u move workspace to output right
 bindsym $mod+z move workspace to output left
 
