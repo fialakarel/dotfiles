@@ -326,6 +326,11 @@ pycharm() {
     fi
 }
 
+ffmpeg-extract-frame() {
+  echo "Running: ffmpeg -ss 00:03:00 -i $1 -vframes 1 -q:v 5 $1.jpg"
+  ffmpeg -ss 00:03:00 -i $1 -vframes 1 -q:v 5 $1.jpg
+}
+
 # Private aliases per device
 if [ -f ~/.bash_aliases_* ]; then
     . ~/.bash_aliases_*
