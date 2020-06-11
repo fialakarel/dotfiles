@@ -17,6 +17,7 @@ map <F10> :set invpaste<CR>
 set pastetoggle=<F10>
 map <F3> :w <CR> :! cat % <CR>
 map <F6> :w <CR> :! chromium-browser % <CR> <CR>
+map <F8> :w <CR> :! aspell check % <CR> <CR>
 
 " set UTF-8 encoding
 set enc=utf-8
