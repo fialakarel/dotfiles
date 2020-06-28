@@ -308,7 +308,7 @@ mplayer() {
 
 winbox() {
    xhost local:root
-   docker run --detach --rm --volume /tmp/.X11-unix:/tmp/.X11-unix --env DISPLAY=$DISPLAY fialakarel/winbox
+   docker run --detach --rm --ipc host --volume /tmp/.X11-unix:/tmp/.X11-unix --env DISPLAY=$DISPLAY fialakarel/winbox
 }
 
 adminer() {
