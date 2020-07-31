@@ -351,6 +351,9 @@ export PATH="/home/kfiala/.pyenv/bin:$PATH"
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 
+# Init poetry
+export PATH="/home/kfiala/.poetry/bin:$PATH"
+
 # Bash greetings
 echo
 date +"%d.%m.%Y %H:%M:%S"
