@@ -346,6 +346,11 @@ if [ -f ~/miniconda3/etc/profile.d/conda.sh ]; then
     source ~/miniconda3/etc/profile.d/conda.sh
 fi
 
+# Init pyenv
+export PATH="/home/kfiala/.pyenv/bin:$PATH"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+
 # Bash greetings
 echo
 date +"%d.%m.%Y %H:%M:%S"
