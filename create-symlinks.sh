@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eufo pipefail
+set -ufo pipefail
 
 prefix="$HOME"
 src="$(dirname $(realpath $0))"

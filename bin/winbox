@@ -1,0 +1,14 @@
+#!/bin/sh
+
+xhost local:root
+
+docker run \
+   --detach \
+   --rm \
+   --ipc host \
+   --net host \
+   --name winbox \
+   --volume /tmp/.X11-unix:/tmp/.X11-unix \
+   --env DISPLAY=$DISPLAY \
+   fialakarel/winbox
+
