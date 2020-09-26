@@ -331,6 +331,25 @@ ffmpeg-extract-frame() {
   ffmpeg -ss 00:03:00 -i $1 -vframes 1 -q:v 5 $1.jpg
 }
 
+ssh-keygen-in-memory() {
+  key="$(mktemp --dry-run --suffix key)"
+  key_pub="${key}.pub"
+  mkfifo $key $key_pub
+  cat $key $key_pub &
+  echo "y" | ssh-keygen -f $key
+  rm $key $key_pub
+}
+
+ssh-keyscan-host() {
+  if [ $# -ne 1 ]
+  then
+    echo "Usage: ssh-keyscan-host <host.example.com>"
+  else
+    HOST="$1"
+    ssh-keyscan $HOST 2>/dev/null | grep "ecdsa-sha2" | sed "s/$HOST/$HOST,$(dig +short $HOST)/"
+  fi
+}
+
 # Private aliases per device
 if [ -f ~/.bash_aliases_* ]; then
     . ~/.bash_aliases_*
