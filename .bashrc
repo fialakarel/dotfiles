@@ -248,6 +248,21 @@ alias diskusage="agedu -s / -w -R"
 
 alias youtube-dl-best="youtube-dl -f 'bestvideo[height <=? 1080][width <=? 1920][ext!=webm]+bestaudio[ext!=webm]/best[ext!=webm]'"
 
+youtube-dl-until() {
+  if [ $# -ge 1 ]
+  then
+    cmd="youtube-dl $@"
+    echo "Running: $cmd"
+    until $cmd
+    do
+      echo "Trying again!"
+      sleep 1
+    done
+  else
+    echo "Usage: youtube-dl-until <url> [params]"
+  fi
+}
+
 # tmux shortcuts
 alias ttm="tmux -2 attach -t ttm || tmux -2 new -s ttm"
 alias ttml="tmux ls"
