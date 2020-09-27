@@ -346,6 +346,28 @@ ffmpeg-extract-frame() {
   ffmpeg -ss 00:03:00 -i $1 -vframes 1 -q:v 5 $1.jpg
 }
 
+ffmpeg-minimize-videosize-mp4() {
+  ffmpeg \
+    -i $1 \
+    -vf scale="800:-1" \
+    -loglevel error \
+    -stats \
+    -threads 0 \
+    -f mp4 \
+    -c:v libx264 \
+    -preset fast \
+    -crf 29 \
+    -tune fastdecode \
+    -movflags faststart \
+    -pix_fmt yuv420p \
+    -c:a aac \
+    -ab 128k \
+    -ar 48000 \
+    -avoid_negative_ts make_zero \
+    -r 30 \
+    $1-mini.mp4
+}
+
 ssh-keygen-in-memory() {
   key="$(mktemp --dry-run --suffix key)"
   key_pub="${key}.pub"
