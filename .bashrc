@@ -398,6 +398,13 @@ kfinstall() {
   fi
 }
 
+kfinstall.list() {
+  curl --silent https://github.com/fialakarel/my-ubuntu-install-steps/tree/master/install \
+    | grep 'js-navigation-open' \
+    | grep -o 'title=".*\.sh" ' \
+    | sed 's/"//g;s/title=//g;s/.sh $//g'
+}
+
 # Private aliases per device
 if [ -f ~/.bash_aliases_* ]; then
     . ~/.bash_aliases_*
