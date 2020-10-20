@@ -387,6 +387,17 @@ ssh-keyscan-host() {
   fi
 }
 
+kfinstall() {
+  if [ $# -ne 1 ]
+  then
+    printf "\n\tUsage: $0 <install-script-without-extension>\n\n"
+    printf "\n\tExample: $0 helm\n\n"
+    printf "\n\tAvailable scripts: https://github.com/fialakarel/my-ubuntu-install-steps/tree/master/install\n\n"
+  else
+    curl --location "https://raw.githubusercontent.com/fialakarel/my-ubuntu-install-steps/master/install/$1.sh" | bash
+  fi
+}
+
 # Private aliases per device
 if [ -f ~/.bash_aliases_* ]; then
     . ~/.bash_aliases_*
