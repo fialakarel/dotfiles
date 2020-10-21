@@ -405,6 +405,26 @@ kfinstall.list() {
     | sed 's/"//g;s/title=//g;s/.sh $//g'
 }
 
+activatekubectl() {
+  export PS1="(k8s: $(/usr/bin/kubectl config current-context)) $PS1"
+}
+
+kubectl() {
+  if [[ $PS1 == "(k8s: "* ]]; then
+    /usr/bin/kubectl "$@"
+  else
+    echo "No k8s cluster environment activated!"
+  fi
+}
+
+helm() {
+  if [[ $PS1 == "(k8s: "* ]]; then
+    /home/kfiala/bin/helm "$@"
+  else
+    echo "No k8s cluster environment activated!"
+  fi
+}
+
 # Private aliases per device
 if [ -f ~/.bash_aliases_* ]; then
     . ~/.bash_aliases_*
