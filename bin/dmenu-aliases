@@ -1,0 +1,14 @@
+#!/bin/bash -i
+
+# This script will "export" all custom aliases
+# and functions and pass it to dmenu
+
+(
+    compgen -a
+    compgen -A function
+) | sort \
+  | uniq \
+  | grep -v '^_.*$' \
+  | grep -v '^\..*' \
+  | dmenu \
+  | bash -i
