@@ -307,6 +307,9 @@ alias search-for-text-in-file='grep --color=always --exclude=".*" --exclude-dir=
 
 alias search-for-filename='find . | grep --ignore-case --color=always'
 
+alias touchpad.disable='xinput --disable $(xinput list | grep "Touchpad" | sed -n "s/^.*id=\([1-9][0-9]\).*$/\1/p")'
+alias touchpad.enable='xinput --enable $(xinput list | grep "Touchpad" | sed -n "s/^.*id=\([1-9][0-9]\).*$/\1/p")'
+
 # Run mirage from shell and avoid spamming console
 mirage() {
     nohup /usr/bin/mirage $@ &>/dev/null & disown
