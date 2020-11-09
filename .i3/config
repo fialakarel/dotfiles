@@ -224,7 +224,7 @@ exec setxkbmap -option 'grp:ctrl_alt_toggle'
 
 exec xsetroot -solid "#000000" &
 exec xset -b &
-exec xmodmap -e "keycode 107 = Menu NoSymbol Menu"
+#exec xmodmap -e "keycode 107 = Menu NoSymbol Menu"
 exec xset r rate 150 60
 
 exec pasystray
