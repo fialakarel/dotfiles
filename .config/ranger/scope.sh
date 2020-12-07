@@ -28,6 +28,8 @@ maxln=200    # Stop after $maxln lines.  Can be used like ls | head -n $maxln
 mimetype=$(file --mime-type -Lb "$path")
 extension=${path##*.}
 
+size=$(stat -c%s "$path") # file size in bytes
+
 # Functions:
 # runs a command and saves its output into $output.  Useful if you need
 # the return value AND want to use the output in a pipe
@@ -46,9 +48,11 @@ case "$extension" in
     # Archive extensions:
     7z|a|ace|alz|arc|arj|bz|bz2|cab|cpio|deb|gz|jar|lha|lz|lzh|lzma|lzo|\
     rpm|rz|t7z|tar|tbz|tbz2|tgz|tlz|txz|tZ|tzo|war|xpi|xz|Z|zip)
-        try als "$path" && { dump | trim; exit 0; }
-        try acat "$path" && { dump | trim; exit 3; }
-        try bsdtar -lf "$path" && { dump | trim; exit 0; }
+        if [ $size -le 10485760 ]; then
+            try als "$path" && { dump | trim; exit 0; }
+            try acat "$path" && { dump | trim; exit 3; }
+            try bsdtar -lf "$path" && { dump | trim; exit 0; }
+        fi
         exit 1;;
     rar)
         try unrar -p- lt "$path" && { dump | trim; exit 0; } || exit 1;;
