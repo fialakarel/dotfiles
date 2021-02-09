@@ -219,6 +219,8 @@ bindsym $mod+u move workspace to output right
 bindsym $mod+Shift+z move workspace to output down
 bindsym $mod+z move workspace to output left
 
+bindsym $mod+Shift+m exec autorandr --change
+
 # startup
 # set keyboard layout
 exec setxkbmap -layout cz,us
