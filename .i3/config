@@ -214,7 +214,9 @@ bindsym --release $mod+Print exec "scrot -s"
 bindsym --release Print exec "scrot"
 bindsym --release $mod+Shift+Print exec "scrot -u -d 3"
 
+bindsym $mod+Shift+u move workspace to output up
 bindsym $mod+u move workspace to output right
+bindsym $mod+Shift+z move workspace to output down
 bindsym $mod+z move workspace to output left
 
 # startup
