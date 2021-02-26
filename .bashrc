@@ -180,17 +180,17 @@ alias ...='cd ../..'
 extract() { 
     if [ -f $1 ] ; then 
     case $1 in 
-        *.tar.bz2)   tar xjf $1     ;; 
-        *.tar.gz)    tar xzf $1     ;; 
-        *.bz2)       bunzip2 $1     ;; 
-        *.rar)       unrar e $1     ;; 
-        *.gz)        gunzip $1      ;; 
-        *.tar)       tar xf $1      ;; 
-        *.tbz2)      tar xjf $1     ;; 
-        *.tgz)       tar xzf $1     ;; 
-        *.zip)       unzip $1       ;; 
-        *.Z)         uncompress $1  ;; 
-        *.7z)        7z x $1        ;; 
+        *.tar.bz2)   nice -n 10 ionice -c 3 tar xjf $1     ;; 
+        *.tar.gz)    nice -n 10 ionice -c 3 tar xzf $1     ;; 
+        *.bz2)       nice -n 10 ionice -c 3 bunzip2 $1     ;; 
+        *.rar)       nice -n 10 ionice -c 3 unrar e $1     ;; 
+        *.gz)        nice -n 10 ionice -c 3 gunzip $1      ;; 
+        *.tar)       nice -n 10 ionice -c 3 tar xf $1      ;; 
+        *.tbz2)      nice -n 10 ionice -c 3 tar xjf $1     ;; 
+        *.tgz)       nice -n 10 ionice -c 3 tar xzf $1     ;; 
+        *.zip)       nice -n 10 ionice -c 3 unzip $1       ;; 
+        *.Z)         nice -n 10 ionice -c 3 uncompress $1  ;; 
+        *.7z)        nice -n 10 ionice -c 3 7z x $1        ;; 
         *)     echo "'$1' cannot be extracted via extract()" ;; 
     esac 
     else 
