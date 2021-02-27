@@ -204,7 +204,7 @@ hide_edge_borders both
 bindsym $mod+comma exec i3-input -F 'rename workspace to "%s"' -P 'New name: '
 
 bindsym $mod+Control+l exec i3lock -c 000050
-exec xautolock -detectsleep -time 3 -locker 'i3lock -c 000050'
+exec xautolock -detectsleep -time 5 -locker 'i3lock -c 000050'
 
 bindsym $mod+Shift+q exec "xterm -e xkill"
 
