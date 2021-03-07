@@ -428,6 +428,33 @@ helm() {
   fi
 }
 
+dump-sr0-to-iso() {
+  if [ $# -ne 1 ]
+  then
+    echo "Usage: dump-sr0-to-iso <output-image-name.iso>"
+  else
+    output_name="$1"
+    block_size=$(isoinfo -d -i /dev/cdrom | grep -i 'block size' | grep -o "[0-9]*")
+    volume_size=$(isoinfo -d -i /dev/cdrom | grep -i 'volume size' | grep -o "[0-9]*")
+    dd if=/dev/sr0 of=${output_name} bs=${block_size} count=${volume_size} status=progress
+  fi
+}
+
+winbox() {
+  docker run \
+      --detach \
+      --rm \
+      --ipc host \
+      --net host \
+      --name winbox \
+      --volume /tmp/.X11-unix:/tmp/.X11-unix \
+      --volume /etc/localtime:/etc/localtime:ro \
+      --volume /usr/share/X11/xkb:/usr/share/X11/xkb:ro \
+      --volume /etc/machine-id:/etc/machine-id:ro \
+      --env DISPLAY=$DISPLAY \
+      fialakarel/winbox
+}
+
 # Private aliases per device
 if [ -f ~/.bash_aliases_* ]; then
     . ~/.bash_aliases_*
