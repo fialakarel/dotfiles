@@ -412,21 +412,22 @@ activatekubectl() {
   export PS1="(k8s: $(/usr/bin/kubectl config current-context)) $PS1"
 }
 
-kubectl() {
-  if [[ $PS1 == "(k8s: "* ]]; then
-    /usr/bin/kubectl "$@"
-  else
-    echo "No k8s cluster environment activated!"
-  fi
-}
-
-helm() {
-  if [[ $PS1 == "(k8s: "* ]]; then
-    /home/kfiala/bin/helm "$@"
-  else
-    echo "No k8s cluster environment activated!"
-  fi
-}
+# Disabled due to Lens
+#kubectl() {
+#  if [[ $PS1 == "(k8s: "* ]]; then
+#    /usr/bin/kubectl "$@"
+#  else
+#    echo "No k8s cluster environment activated!"
+#  fi
+#}
+#
+#helm() {
+#  if [[ $PS1 == "(k8s: "* ]]; then
+#    /home/kfiala/bin/helm "$@"
+#  else
+#    echo "No k8s cluster environment activated!"
+#  fi
+#}
 
 dump-sr0-to-iso() {
   if [ $# -ne 1 ]
