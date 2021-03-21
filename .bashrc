@@ -437,7 +437,7 @@ dump-sr0-to-iso() {
     output_name="$1"
     block_size=$(isoinfo -d -i /dev/cdrom | grep -i 'block size' | grep -o "[0-9]*")
     volume_size=$(isoinfo -d -i /dev/cdrom | grep -i 'volume size' | grep -o "[0-9]*")
-    dd if=/dev/sr0 of=${output_name} bs=${block_size} count=${volume_size} status=progress
+    dd if=/dev/sr0 of=${output_name} bs=${block_size} count=${volume_size} status=progress conv=noerror,sync iflag=fullblock
   fi
 }
 
