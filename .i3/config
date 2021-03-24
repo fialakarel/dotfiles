@@ -174,8 +174,10 @@ bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && killall -USR1 i3status
 
 # brightness control
-bindsym XF86MonBrightnessDown exec --no-startup-id xbacklight -steps 1 -time 0 -dec 5
-bindsym XF86MonBrightnessUp exec --no-startup-id xbacklight -steps 1 -time 0 -inc 10
+#bindsym XF86MonBrightnessDown exec --no-startup-id xbacklight -steps 1 -time 0 -dec 5
+#bindsym XF86MonBrightnessUp exec --no-startup-id xbacklight -steps 1 -time 0 -inc 10
+bindsym XF86MonBrightnessDown exec --no-startup-id /bin/sh -c "echo $(($(cat /sys/class/backlight/intel_backlight/brightness) - 50)) | sudo tee /sys/class/backlight/intel_backlight/brightness"
+bindsym XF86MonBrightnessUp exec --no-startup-id /bin/sh -c "echo $(($(cat /sys/class/backlight/intel_backlight/brightness) + 50)) | sudo tee /sys/class/backlight/intel_backlight/brightness"
 
 # scratchpad
 bindsym $mod+m move scratchpad
