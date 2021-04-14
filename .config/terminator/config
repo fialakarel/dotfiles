@@ -4,6 +4,8 @@
   enabled_plugins = ,
 [keybindings]
   new_tab = <Primary>t
+  line_up = <Primary><Shift>k
+  line_down = <Primary><Shift>j
   next_tab = <Alt>Right
   prev_tab = <Alt>Left
 [profiles]
