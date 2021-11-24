@@ -225,6 +225,7 @@ bindsym $mod+Shift+z move workspace to output down
 bindsym $mod+z move workspace to output left
 
 bindsym $mod+Shift+m exec autorandr --change
+bindsym $mod+Shift+n exec sudo netplan apply
 
 # startup
 # set keyboard layout
