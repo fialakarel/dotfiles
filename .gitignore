@@ -17,3 +17,11 @@
 .vscode
 
 __pycache__
+
+.python-version
+
+# anything that is secret
+*.secret
+
+.DS_Store
+

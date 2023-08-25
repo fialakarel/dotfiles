@@ -68,6 +68,8 @@ bindsym $mod+Shift+Right move right
 
 bindsym $mod+n workspace next_on_output
 bindsym $mod+p workspace prev_on_output
+bindsym --whole-window $mod+button5 workspace next_on_output
+bindsym --whole-window $mod+button4 workspace prev_on_output
 
 # split in horizontal orientation
 bindsym $mod+g split h
@@ -106,6 +108,7 @@ bindsym $mod+yacute workspace number 7
 bindsym $mod+aacute workspace number 8
 bindsym $mod+iacute workspace number 9
 bindsym $mod+eacute workspace number 10
+bindsym $mod+semicolon workspace "dmesg"
 
 # move focused container to workspace
 bindsym $mod+Shift+plus move container to workspace number 1
@@ -176,8 +179,8 @@ bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ to
 # brightness control
 #bindsym XF86MonBrightnessDown exec --no-startup-id xbacklight -steps 1 -time 0 -dec 5
 #bindsym XF86MonBrightnessUp exec --no-startup-id xbacklight -steps 1 -time 0 -inc 10
-bindsym XF86MonBrightnessDown exec --no-startup-id /bin/sh -c "echo $(($(cat /sys/class/backlight/intel_backlight/brightness) - 50)) | sudo tee /sys/class/backlight/intel_backlight/brightness"
-bindsym XF86MonBrightnessUp exec --no-startup-id /bin/sh -c "echo $(($(cat /sys/class/backlight/intel_backlight/brightness) + 50)) | sudo tee /sys/class/backlight/intel_backlight/brightness"
+bindsym XF86MonBrightnessDown exec --no-startup-id /bin/sh -c "echo $(($(cat /sys/class/backlight/intel_backlight/brightness) - 1000)) | sudo tee /sys/class/backlight/intel_backlight/brightness && echo $(( $(echo $((100000/$(cat /sys/class/backlight/intel_backlight/max_brightness)))) * $(($(cat /sys/class/backlight/intel_backlight/brightness) - 1000)) / 1000 )) | tee /tmp/brightness && killall -USR1 i3status"
+bindsym XF86MonBrightnessUp exec --no-startup-id /bin/sh -c "echo $(($(cat /sys/class/backlight/intel_backlight/brightness) + 1000)) | sudo tee /sys/class/backlight/intel_backlight/brightness && echo $(( $(echo $((100000/$(cat /sys/class/backlight/intel_backlight/max_brightness)))) * $(($(cat /sys/class/backlight/intel_backlight/brightness) + 1000)) / 1000 )) | tee /tmp/brightness && killall -USR1 i3status"
 
 # scratchpad
 bindsym $mod+m move scratchpad
@@ -207,30 +210,32 @@ hide_edge_borders both
 
 bindsym $mod+comma exec i3-input -F 'rename workspace to "%s"' -P 'New name: '
 
-bindsym $mod+Control+l exec i3lock -c 000050
-exec xautolock -detectsleep -time 10 -locker 'i3lock -c 000050'
+bindsym $mod+Control+l exec i3lock -c 000050 && sleep 0.5 && xset -display :0.0 dpms force off
+#exec xautolock -detectsleep -time 10 -locker 'i3lock -c 000050'
 
 bindsym $mod+Shift+q exec "xterm -e xkill"
 
 # mod+f5 to turn off display
-bindsym $mod+F5 exec sleep 0.1 && xset -display :0.0 dpms force off
+bindsym $mod+F5 exec sleep 0.2 && xset -display :0.0 dpms force off
 
-bindsym --release $mod+Print exec "scrot -s"
-bindsym --release Print exec "scrot"
-bindsym --release $mod+Shift+Print exec "scrot -u -d 3"
+bindsym --release $mod+Print exec "scrot -s -e 'xclip -selection clipboard -t image/png -i $f'"
+bindsym --release Print exec "scrot -e 'xclip -selection clipboard -t image/png -i $f'"
+bindsym --release $mod+Shift+Print exec "scrot -u -d 3 -e 'xclip -selection clipboard -t image/png -i $f'"
 
 bindsym $mod+Shift+u move workspace to output up
 bindsym $mod+u move workspace to output right
 bindsym $mod+Shift+z move workspace to output down
 bindsym $mod+z move workspace to output left
 
-bindsym $mod+Shift+m exec autorandr --change
-bindsym $mod+Shift+n exec sudo netplan apply
+bindsym $mod+Shift+m exec --no-startup-id autorandr --change && [ -z "$(autorandr --detected)" ] && arandr
+bindsym $mod+Shift+s exec --no-startup-id /home/kfiala/bin/switch-sound.sh
+
+#bindsym $mod+Shift+n exec sudo netplan apply
 
 # startup
 # set keyboard layout
-exec setxkbmap -layout cz,us
-exec setxkbmap -option 'grp:ctrl_alt_toggle'
+#exec setxkbmap -layout cz,us
+#exec setxkbmap -option 'grp:ctrl_alt_toggle'
 
 exec xsetroot -solid "#000000" &
 exec xset -b &
@@ -241,5 +246,27 @@ exec pasystray &
 exec insync start &
 #exec udiskie -t &
 exec xhost +local:root &
-exec xinput --set-prop "ETPS/2 Elantech TrackPoint" "libinput Accel Speed" 0.8 &
+#exec xinput --set-prop "ETPS/2 Elantech TrackPoint" "libinput Accel Speed" 0.8 &
+exec synclient TapButton2=2
+exec synclient TapButton3=3
+exec synclient PalmDetect=1
+exec synclient PalmMinWidth=4
+exec synclient PalmMinZ=50
+exec synclient HorizTwoFingerScroll=1
+exec syndaemon -i 0.3 -t -K -R -d
+exec synclient AreaRightEdge=2800
+
+# Suspend to RAM (s2idle) used not to work correctly. Starting from Linux Kernel 5.14, the problem has been solved and s2idle works perfectly
+#exec /bin/sh -c "echo deep | sudo tee /sys/power/mem_sleep"
+
+exec nohup sudo /usr/bin/python3 /opt/asus-touchpad-numpad-driver/asus_touchpad.py &
+
+# Set charging limit to 80% by default
+exec /bin/sh -c "echo 80 | sudo tee /sys/class/power_supply/BAT0/charge_control_end_threshold" &
+
+# Read the Brightness level
+exec /bin/sh -c "echo $(( $(echo $((100000/$(cat /sys/class/backlight/intel_backlight/max_brightness)))) * $(cat /sys/class/backlight/intel_backlight/brightness) / 1000 )) | tee /tmp/brightness" &
+
+# Set monitors
+exec autorandr --change
 

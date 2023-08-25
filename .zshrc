@@ -73,6 +73,9 @@ ZSH_THEME="robbyrussell"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
 
+bindkey '^ ' autosuggest-accept
+bindkey \^U backward-kill-line
+
 # setup correction
 setopt correct
 setopt histignorespace
@@ -125,7 +128,7 @@ export PATH="$HOME/bin:$PATH"
 
 alias clearswap='sudo swapoff -a ; sudo swapon -a'
 alias boost='sudo prelink -avmqRf'
-alias doupt='sudo apt-get update ; sudo apt-get upgrade'
+alias doupt='sudo apt-get update ; sudo apt-get dist-upgrade'
 alias his='history | grep -i '
 alias stp='sudo pkill -STOP'
 alias cnt='sudo pkill -CONT'
@@ -136,6 +139,7 @@ alias tmux="tmux -2"
 #Productivity 
 alias ls="ls --color=auto" 
 alias ll="ls --color -alFh" 
+alias llt="ls --color -alFh --sort=time" 
 alias grep='grep --color=auto' 
 mcd() { mkdir -p "$1"; cd "$1";} 
 mkdate() { local DIR="$(date +%F)-$1" ; mkdir "$DIR" && cd "$DIR" ; }
@@ -245,7 +249,7 @@ alias icp='cp --reflink=auto --sparse=always'
 
 lxc_tmp() {
     x=${1:-tmp1}
-    lxc launch ubuntu:16.04 $x --profile default --profile docker
+    lxc launch ubuntu:20.04 $x --profile default --profile docker
     lxc exec $x -- mkdir /root/.ssh
     lxc file push ~/.ssh/id_rsa.pub $x/root/.ssh/authorized_keys
     lxc exec $x -- chown -R root:root /root
@@ -277,6 +281,10 @@ alias search-for-filename='find . | grep --ignore-case --color=always'
 alias touchpad.disable='xinput --disable $(xinput list | grep "Touchpad" | sed -n "s/^.*id=\([1-9][0-9]\).*$/\1/p")'
 alias touchpad.enable='xinput --enable $(xinput list | grep "Touchpad" | sed -n "s/^.*id=\([1-9][0-9]\).*$/\1/p")'
 
+alias sleep-after="systemd-inhibit --what=handle-lid-switch"
+
+alias storage-explorer="/opt/StorageExplorer/StorageExplorer"
+
 # Run mirage from shell and avoid spamming console
 mirage() {
     nohup /usr/bin/mirage $@ &>/dev/null & disown
@@ -294,7 +302,7 @@ mplayer() {
 adminer() {
     docker run \
         --detach \
-        --restart always \
+        --restart unless-stopped \
         --name adminer \
         --publish 127.0.0.1:8080:8080/tcp \
         adminer:4-standalone
@@ -309,6 +317,12 @@ pycharm() {
     else
         nohup /opt/pycharm-community-*/bin/pycharm.sh $@ &>/dev/null </dev/null &
     fi
+}
+
+ffmpeg-concat-all-mp4() {
+  find *.mp4 | sed 's:\ :\\\ :g'| sed 's/^/file /' > list.txt
+  ffmpeg -f concat -i list.txt -c copy output.mp4
+  rm list.txt
 }
 
 ffmpeg-extract-frame() {
@@ -434,6 +448,11 @@ dump-sr0-to-iso() {
   fi
 }
 
+files() {
+  nohup nautilus $1 &>/dev/null &
+  disown
+}
+
 winbox() {
   docker run \
       --detach \
@@ -445,6 +464,7 @@ winbox() {
       --volume /etc/localtime:/etc/localtime:ro \
       --volume /usr/share/X11/xkb:/usr/share/X11/xkb:ro \
       --volume /etc/machine-id:/etc/machine-id:ro \
+      --volume "$HOME/.local/share/winbox:/root/.wine/drive_c/users/root/Application Data/Mikrotik/Winbox" \
       --env DISPLAY=$DISPLAY \
       fialakarel/winbox
 }
@@ -469,6 +489,11 @@ export PATH="/home/kfiala/.poetry/bin:$PATH"
 
 # Init PATH for python and local binaries
 export PATH="/home/kfiala/.local/bin:$PATH"
+export PATH="/home/kfiala/.pyenv/shims:$PATH"
+export PATH="$PATH:/opt/mssql-tools/bin"
+
+# GO PATH
+export PATH="$PATH:/home/kfiala/go/bin"
 
 # Bash greetings
 echo
@@ -476,3 +501,7 @@ date +"%d.%m.%Y %H:%M:%S"
 uptime | cut -d" " -f 2-99
 echo
 
+
+export PATH="$HOME/.poetry/bin:$PATH"
+
+eval $(thefuck --alias)
