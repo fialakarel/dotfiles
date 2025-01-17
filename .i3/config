@@ -18,7 +18,11 @@ set $mod Mod4
 ### font pango:DejaVu Sans Mono 8
 #font pango: Monospace 9
 # Before i3 v4.8, we used to recommend this one as the default:
-font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
+#font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
+#font xft:Hack Nerd Font, FontAwesome 10
+#font pango:monospace 8, FontAwesome 8
+#font pango: M+ 1m, FontAwesome, Ionicons, 10
+font pango:System San Francisco Display, FontAwesome 9
 # The font above is very space-efficient, that is, it looks good, sharp and
 # clear in small sizes. However, its unicode glyph coverage is limited, the old
 # X core fonts rendering does not support right-to-left and this being a bitmap
@@ -28,7 +32,8 @@ font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec i3-sensible-terminal
+#bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+Return exec kitty --single-instance
 
 # kill focused window
 bindsym $mod+q kill
@@ -108,7 +113,7 @@ bindsym $mod+yacute workspace number 7
 bindsym $mod+aacute workspace number 8
 bindsym $mod+iacute workspace number 9
 bindsym $mod+eacute workspace number 10
-bindsym $mod+semicolon workspace "dmesg"
+bindsym $mod+semicolon workspace number 0
 
 # move focused container to workspace
 bindsym $mod+Shift+plus move container to workspace number 1
@@ -121,6 +126,8 @@ bindsym $mod+Shift+yacute move container to workspace number 7
 bindsym $mod+Shift+aacute move container to workspace number 8
 bindsym $mod+Shift+iacute move container to workspace number 9
 bindsym $mod+Shift+eacute move container to workspace number 10
+bindsym $mod+Shift+semicolon move container to workspace number 0
+
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
@@ -208,19 +215,21 @@ for_window [class="^.*"] border pixel 1
 
 hide_edge_borders both
 
-bindsym $mod+comma exec i3-input -F 'rename workspace to "%s"' -P 'New name: '
+bindsym $mod+comma exec --no-startup-id i3-input -F 'rename workspace to "%s"' -P 'New name: '
 
-bindsym $mod+Control+l exec i3lock -c 000050 && sleep 0.5 && xset -display :0.0 dpms force off
-#exec xautolock -detectsleep -time 10 -locker 'i3lock -c 000050'
+bindsym $mod+Control+l exec --no-startup-id i3lock -c 000050 && sleep 0.5 && xset -display :0.0 dpms force off
+#exec xautolock -detectsleep -time 10 -locker 'i3lock -c 000050' &
+exec --no-startup-id xss-lock -- i3lock -c 000050 &
 
-bindsym $mod+Shift+q exec "xterm -e xkill"
+
+bindsym $mod+Shift+q exec --no-startup-id "xterm -e xkill"
 
 # mod+f5 to turn off display
-bindsym $mod+F5 exec sleep 0.2 && xset -display :0.0 dpms force off
+bindsym $mod+F5 exec --no-startup-id sleep 0.2 && xset -display :0.0 dpms force off
 
-bindsym --release $mod+Print exec "scrot -s -e 'xclip -selection clipboard -t image/png -i $f'"
-bindsym --release Print exec "scrot -e 'xclip -selection clipboard -t image/png -i $f'"
-bindsym --release $mod+Shift+Print exec "scrot -u -d 3 -e 'xclip -selection clipboard -t image/png -i $f'"
+bindsym --release $mod+Print exec --no-startup-id "scrot -s -e 'xclip -selection clipboard -t image/png -i $f'"
+bindsym --release Print exec --no-startup-id "scrot -e 'xclip -selection clipboard -t image/png -i $f'"
+bindsym --release $mod+Shift+Print exec --no-startup-id "scrot -u -d 3 -e 'xclip -selection clipboard -t image/png -i $f'"
 
 bindsym $mod+Shift+u move workspace to output up
 bindsym $mod+u move workspace to output right
@@ -237,36 +246,47 @@ bindsym $mod+Shift+s exec --no-startup-id /home/kfiala/bin/switch-sound.sh
 #exec setxkbmap -layout cz,us
 #exec setxkbmap -option 'grp:ctrl_alt_toggle'
 
-exec xsetroot -solid "#000000" &
-exec xset -b &
+exec_always xsetroot -solid "#000000" &
+exec_always xset -b &
 #exec xmodmap -e "keycode 107 = Menu NoSymbol Menu"
-exec xset r rate 150 60 &
+exec_always xset r rate 150 60 &
 
 exec pasystray &
-exec insync start &
+#exec insync start &
 #exec udiskie -t &
+exec udiskie --no-automount --no-notify --tray &
 exec xhost +local:root &
 #exec xinput --set-prop "ETPS/2 Elantech TrackPoint" "libinput Accel Speed" 0.8 &
-exec synclient TapButton2=2
-exec synclient TapButton3=3
-exec synclient PalmDetect=1
-exec synclient PalmMinWidth=4
-exec synclient PalmMinZ=50
-exec synclient HorizTwoFingerScroll=1
+# https://wiki.archlinux.org/title/Touchpad_Synaptics
+exec_always synclient TapButton1=1
+exec_always synclient TapButton2=2
+exec_always synclient TapButton3=3
+exec_always synclient PalmDetect=1
+exec_always synclient PalmMinWidth=4
+exec_always synclient PalmMinZ=50
+exec_always synclient HorizTwoFingerScroll=1
 exec syndaemon -i 0.3 -t -K -R -d
-exec synclient AreaRightEdge=2800
+exec_always synclient AreaRightEdge=2800
+
+
+#exec --no-startup-id xdotool behave_screen_edge bottom exec --sync /home/kfiala/bin/idle-saver.sh
+exec --no-startup-id /bin/bash -c "while ((1)) ; do bash ~/bin/idle-saver.sh ; done" &
+exec --no-startup-id /bin/bash  /home/kfiala/bin/tailscale-auto.sh &
 
 # Suspend to RAM (s2idle) used not to work correctly. Starting from Linux Kernel 5.14, the problem has been solved and s2idle works perfectly
 #exec /bin/sh -c "echo deep | sudo tee /sys/power/mem_sleep"
 
-exec nohup sudo /usr/bin/python3 /opt/asus-touchpad-numpad-driver/asus_touchpad.py &
+#exec nohup sudo /usr/bin/python3 /opt/asus-touchpad-numpad-driver/asus_touchpad.py &
 
-# Set charging limit to 80% by default
-exec /bin/sh -c "echo 80 | sudo tee /sys/class/power_supply/BAT0/charge_control_end_threshold" &
+## Set charging limit to 80% by default
+#exec --no-startup-id /bin/sh -c "echo 80 | sudo tee /sys/class/power_supply/BAT0/charge_control_end_threshold" &
 
 # Read the Brightness level
-exec /bin/sh -c "echo $(( $(echo $((100000/$(cat /sys/class/backlight/intel_backlight/max_brightness)))) * $(cat /sys/class/backlight/intel_backlight/brightness) / 1000 )) | tee /tmp/brightness" &
+exec --no-startup-id /bin/sh -c "echo $(( $(echo $((100000/$(cat /sys/class/backlight/intel_backlight/max_brightness)))) * $(cat /sys/class/backlight/intel_backlight/brightness) / 1000 )) | tee /tmp/brightness" &
+
+# Run 1password
+exec --no-startup-id 1password --silent &
 
 # Set monitors
-exec autorandr --change
+exec --no-startup-id autorandr --change &
 

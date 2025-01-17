@@ -63,6 +63,19 @@ ZSH_THEME="robbyrussell"
 # see 'man strftime' for details.
 # HIST_STAMPS="mm/dd/yyyy"
 
+#set history size
+export HISTSIZE=30000
+#save history after logout
+export SAVEHIST=30000
+#history file
+#export HISTFILE=~/.zhistory
+#append into history file
+setopt INC_APPEND_HISTORY
+#save only one command if 2 common are same and consistent
+setopt HIST_IGNORE_DUPS
+#add timestamp for each entry
+setopt EXTENDED_HISTORY
+
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
@@ -71,7 +84,8 @@ ZSH_THEME="robbyrussell"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
+# see more: https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting urltools)
 
 bindkey '^ ' autosuggest-accept
 bindkey \^U backward-kill-line
@@ -133,6 +147,7 @@ alias his='history | grep -i '
 alias stp='sudo pkill -STOP'
 alias cnt='sudo pkill -CONT'
 alias bc="bc -l"
+alias vi="vim"
 #alias tmux="tmux attach || tmux"
 alias tmux="tmux -2"
 
@@ -284,6 +299,13 @@ alias touchpad.enable='xinput --enable $(xinput list | grep "Touchpad" | sed -n 
 alias sleep-after="systemd-inhibit --what=handle-lid-switch"
 
 alias storage-explorer="/opt/StorageExplorer/StorageExplorer"
+
+alias umount-all-media="umount /run/media/kfiala/*"
+
+alias pbcopy='xsel --clipboard --input'
+alias pbpaste='xsel --clipboard --output'
+
+alias cat='bat'
 
 # Run mirage from shell and avoid spamming console
 mirage() {
@@ -469,6 +491,7 @@ winbox() {
       fialakarel/winbox
 }
 
+
 # Private aliases per device
 if [ -f ~/.bash_aliases_* ]; then
     . ~/.bash_aliases_*
@@ -479,10 +502,10 @@ if [ -f ~/miniconda3/etc/profile.d/conda.sh ]; then
     source ~/miniconda3/etc/profile.d/conda.sh
 fi
 
-# Init pyenv
-export PATH="/home/kfiala/.pyenv/bin:$PATH"
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
+## Init pyenv
+#export PATH="/home/kfiala/.pyenv/bin:$PATH"
+#eval "$(pyenv init -)"
+#eval "$(pyenv virtualenv-init -)"
 
 # Init poetry
 export PATH="/home/kfiala/.poetry/bin:$PATH"
@@ -495,13 +518,55 @@ export PATH="$PATH:/opt/mssql-tools/bin"
 # GO PATH
 export PATH="$PATH:/home/kfiala/go/bin"
 
-# Bash greetings
-echo
-date +"%d.%m.%Y %H:%M:%S"
-uptime | cut -d" " -f 2-99
-echo
+# Kitty configuration
+[ "$TERM" = "xterm-kitty" ] && alias ssh="kitty +kitten ssh"
+alias icat="kitty +kitten icat"
+alias idiff="kitty +kitten diff"
 
+## Bash greetings
+#echo
+#date +"%d.%m.%Y %H:%M:%S"
+#uptime | cut -d" " -f 2-99
+#echo
+
+# Prevent nested Ranger
+ranger() {
+    if [ -z "$RANGER_LEVEL" ]; then
+        /usr/bin/ranger "$@"
+    else
+        exit
+    fi
+}
 
 export PATH="$HOME/.poetry/bin:$PATH"
 
-eval $(thefuck --alias)
+# Load fzf
+source <(fzf --zsh)
+#export FZF_DEFAULT_OPTS='--no-height --no-reverse'
+export FZF_DEFAULT_OPTS='--no-reverse'
+# select file or dir
+export FZF_CTRL_T_OPTS="--preview '(highlight -O ansi -l {} 2> /dev/null || cat {} || tree -C {}) 2> /dev/null | head -200'"
+# list history
+export FZF_CTRL_R_OPTS='--no-sort --exact'
+# cd into dir
+export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
+
+#eval $(thefuck --alias)
+# copy&paste to speed it up
+            fuck () {
+                TF_PYTHONIOENCODING=$PYTHONIOENCODING;
+                export TF_SHELL=zsh;
+                export TF_ALIAS=fuck;
+                TF_SHELL_ALIASES=$(alias);
+                export TF_SHELL_ALIASES;
+                TF_HISTORY="$(fc -ln -10)";
+                export TF_HISTORY;
+                export PYTHONIOENCODING=utf-8;
+                TF_CMD=$(
+                    thefuck THEFUCK_ARGUMENT_PLACEHOLDER $@
+                ) && eval $TF_CMD;
+                unset TF_HISTORY;
+                export PYTHONIOENCODING=$TF_PYTHONIOENCODING;
+                test -n "$TF_CMD" && print -s $TF_CMD
+            }
+

@@ -8,6 +8,20 @@
 [pull]
 	rebase = true
 
+[diff]
+    tool = kitty
+    guitool = kitty.gui
+
+[difftool]
+    prompt = false
+    trustExitCode = true
+
+[difftool "kitty"]
+    cmd = kitten diff $LOCAL $REMOTE
+
+[difftool "kitty.gui"]
+    cmd = kitten diff $LOCAL $REMOTE
+
 [color]
         ui = auto
 
@@ -104,3 +118,5 @@
 	required = true
 [init]
 	defaultBranch = main
+[diff]
+	algorithm = histogram
