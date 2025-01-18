@@ -189,9 +189,9 @@ bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ to
 bindsym XF86MonBrightnessDown exec --no-startup-id /bin/sh -c "echo $(($(cat /sys/class/backlight/intel_backlight/brightness) - 1000)) | sudo tee /sys/class/backlight/intel_backlight/brightness && echo $(( $(echo $((100000/$(cat /sys/class/backlight/intel_backlight/max_brightness)))) * $(($(cat /sys/class/backlight/intel_backlight/brightness) - 1000)) / 1000 )) | tee /tmp/brightness && killall -USR1 i3status"
 bindsym XF86MonBrightnessUp exec --no-startup-id /bin/sh -c "echo $(($(cat /sys/class/backlight/intel_backlight/brightness) + 1000)) | sudo tee /sys/class/backlight/intel_backlight/brightness && echo $(( $(echo $((100000/$(cat /sys/class/backlight/intel_backlight/max_brightness)))) * $(($(cat /sys/class/backlight/intel_backlight/brightness) + 1000)) / 1000 )) | tee /tmp/brightness && killall -USR1 i3status"
 
-# scratchpad
-bindsym $mod+m move scratchpad
-bindsym $mod+o scratchpad show
+## scratchpad
+#bindsym $mod+m move scratchpad
+#bindsym $mod+o scratchpad show
 
 # workspace assignment (use "xprop")
 #assign [class="^kate$"] 3
